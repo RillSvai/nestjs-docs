@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { Cat } from './entities/cat.entity';
@@ -19,15 +15,14 @@ export class CatsService {
     return await this.catRepository.find();
   }
   async create(createCatDto: CreateCatDto): Promise<Cat> {
-    const cat: Cat = new Cat(createCatDto);
-    if (await this.catRepository.findOneBy({ name: cat.name })) {
+    if (await this.catRepository.findOneBy({ name: createCatDto.name })) {
       throw new BadRequestException(
-        `Cat with name: '${cat.name}' already exist`,
+        `Cat with name: '${createCatDto.name}' already exist`,
       );
     }
-    return await this.entityManager.save(cat);
+    return await this.entityManager.save(new Cat(createCatDto));
   }
-  async remove(id: number): Promise<void> {
-    await this.catRepository.delete(id);
+  async remove(cat: Cat): Promise<void> {
+    await this.catRepository.remove(cat);
   }
 }

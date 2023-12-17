@@ -4,15 +4,16 @@ import {
   IsPositive,
   MinLength,
   IsString,
+  IsInt,
 } from 'class-validator';
 
 export class CreateCatDto {
-  @MinLength(3)
   @IsNotEmpty()
+  @MinLength(3)
   name: string;
 
-  @IsPositive()
   @IsNotEmpty()
+  @IsPositive()
   age: number;
 
   @IsOptional()

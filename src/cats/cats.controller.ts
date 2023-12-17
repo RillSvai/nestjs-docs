@@ -1,4 +1,4 @@
-import { Body, Controller, ParseIntPipe, Post } from '@nestjs/common';
+import { Body, Controller, Delete, ParseIntPipe, Post } from '@nestjs/common';
 import { Get } from '@nestjs/common';
 import { Param } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
@@ -26,5 +26,12 @@ export class CatsController {
     @Param('id', ParseIntPipe, new PositiveNumberPipe(), CatByIdPipe) cat: Cat,
   ): Promise<Cat> {
     return cat;
+  }
+
+  @Delete(':id')
+  async remove(
+    @Param('id', ParseIntPipe, new PositiveNumberPipe(), CatByIdPipe) cat: Cat,
+  ) {
+    this.catService.remove(cat);
   }
 }
