@@ -1,9 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, ParseIntPipe, Post } from '@nestjs/common';
 import { Get } from '@nestjs/common';
 import { Param } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { CatsService } from './cats.service';
 import { Cat } from './entities/cat.entity';
+import { PositiveNumberPipe } from 'src/global-pipes/positive-number.pipe.';
+import { CatByIdPipe } from './pipes/cat-by-id.pipe';
 
 @Controller('cats')
 export class CatsController {
@@ -20,7 +22,9 @@ export class CatsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number): Promise<Cat> {
-    return await this.catService.findOne(id);
+  async findOne(
+    @Param('id', ParseIntPipe, new PositiveNumberPipe(), CatByIdPipe) cat: Cat,
+  ): Promise<Cat> {
+    return cat;
   }
 }

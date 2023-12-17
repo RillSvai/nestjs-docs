@@ -18,16 +18,6 @@ export class CatsService {
   async findAll(): Promise<Cat[]> {
     return await this.catRepository.find();
   }
-  async findOne(id: number): Promise<Cat> {
-    if (id <= 0) {
-      throw new BadRequestException('Invalid id');
-    }
-    const cat: Cat | null = await this.catRepository.findOneBy({ id });
-    if (cat === null) {
-      throw new NotFoundException('Cat doesn`t exist');
-    }
-    return cat;
-  }
   async create(createCatDto: CreateCatDto): Promise<Cat> {
     const cat: Cat = new Cat(createCatDto);
     if (await this.catRepository.findOneBy({ name: cat.name })) {
