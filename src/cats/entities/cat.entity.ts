@@ -1,5 +1,6 @@
 import { BaseEntity } from 'src/database/entities/base.entity';
-import { Column, Entity } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Cat extends BaseEntity<Cat> {
@@ -11,4 +12,8 @@ export class Cat extends BaseEntity<Cat> {
 
   @Column({ nullable: true })
   breed: string;
+
+  @ManyToOne(() => User, (user) => user.cats)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }

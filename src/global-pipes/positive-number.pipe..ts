@@ -1,6 +1,5 @@
-import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
+import { BadRequestException, PipeTransform } from '@nestjs/common';
 
-@Injectable()
 export class PositiveNumberPipe
   implements PipeTransform<number, Promise<number>>
 {
