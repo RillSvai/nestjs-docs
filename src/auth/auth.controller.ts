@@ -1,19 +1,19 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Scope } from '@nestjs/common';
 import { SignInDto } from './dto/sign-in.dto';
 import { AuthService } from './auth.service';
 import { Post, Get } from '@nestjs/common';
-import { AuthGuard } from './auth.guard';
+import { RequestService } from 'src/services/request.service';
+import { PayloadDto } from './dto/payload.dto';
 
-@Controller('auth')
+@Controller({
+  path: 'auth',
+  scope: Scope.REQUEST,
+})
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly requestService: RequestService,
+  ) {}
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
@@ -21,9 +21,8 @@ export class AuthController {
     return await this.authService.signIn(signInDto);
   }
 
-  @UseGuards(AuthGuard)
   @Get('profile')
-  getProfile(@Request() request: any) {
-    return request.user;
+  getProfile(): PayloadDto {
+    return this.requestService.User;
   }
 }

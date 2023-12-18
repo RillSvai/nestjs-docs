@@ -2,9 +2,10 @@ import {
   Body,
   Controller,
   Delete,
+  HttpCode,
+  HttpStatus,
   ParseIntPipe,
   Post,
-  UseGuards,
 } from '@nestjs/common';
 import { Get } from '@nestjs/common';
 import { Param } from '@nestjs/common';
@@ -13,7 +14,6 @@ import { CatsService } from './cats.service';
 import { Cat } from './entities/cat.entity';
 import { PositiveNumberPipe } from 'src/global-pipes/positive-number.pipe.';
 import { CatByIdPipe } from './pipes/cat-by-id.pipe';
-import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('cats')
 export class CatsController {
@@ -24,7 +24,6 @@ export class CatsController {
     return await this.catService.findAll();
   }
 
-  @UseGuards(AuthGuard)
   @Post()
   async create(@Body() createCatDto: CreateCatDto): Promise<Cat> {
     return await this.catService.create(createCatDto);
@@ -37,7 +36,7 @@ export class CatsController {
     return cat;
   }
 
-  @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   async remove(
     @Param('id', ParseIntPipe, new PositiveNumberPipe(), CatByIdPipe) cat: Cat,
